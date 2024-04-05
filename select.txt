@@ -1,0 +1,38 @@
+
+	select 
+        distinct a.mm_referencia || '/' || a.aa_referencia periodo,
+        round(100*((a.vl_total - c.vl_total)/c.vl_total), 2) perc
+     
+      
+  from valor_beneficiario a,
+       evento_fatura         b,
+       valor_beneficiario c,
+       regra_menslid_criterio d,
+       regra_menslid_criterio e,
+       carteira_identificacao u 
+where 
+
+   u.cd_unimed = &unidade
+  AND u.cd_carteira_inteira = &cartaoUsuario
+  and a.cd_modalidade = u.cd_modalidade
+  and a.nr_ter_adesao = u.nr_ter_adesao
+  and a.cd_usuario = u.cd_usuario
+  and a.cd_evento = b.cd_evento  
+  and b.u##in_entidade = 'FT'
+  and b.u##in_classe_evento = 'A'
+  and a.cd_modalidade = c.cd_modalidade
+  and a.nr_ter_adesao = c.nr_ter_adesao
+  and a.cd_usuario    = c.cd_usuario
+  and a.cd_evento     = c.cd_evento
+  and a.nr_faixa_etaria > c.nr_faixa_etaria
+  and d.cdd_id = a.dec_3
+  and e.cdd_id = c.dec_3
+  and d.cdd_regra = e.cdd_regra
+  and to_date(c.aa_referencia||lpad(c.mm_referencia,2,'0')||'01','yyyymmdd') = add_months(to_date(a.aa_referencia||lpad(a.mm_referencia,2,'0')||'01','yyyymmdd'),-1)
+  and a.vl_total > 0
+  and (a.vl_total - c.vl_total) > 0
+ 
+
+    
+    
+    
