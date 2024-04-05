@@ -1,13 +1,16 @@
+{
+  "categoria": "Reajuste de Contrato",
+  "periodos": [
     {
-            "categoria": "Reajuste de Contrato",
-            "periodos": [ 
-                {   "periodo": "--/----",
-                    "percentualReajuste": "--",
-                    "exibirBotaoExtratoPdf": 0,
-                    "detalhes": [
-                    { "Titulo": "Contrato Coletivo Empresarial",
-                      "Campo":  "Favor entrar em contrato com o setor de Recursos Humanos da sua empresa."}
-                    ]
-                }
-            ]
+      "periodo": "--/----",
+      "percentualReajuste": "--",
+      "exibirBotaoExtratoPdf": 0,
+      "detalhes": [
+        {
+          "Titulo": "Contrato Coletivo Empresarial",
+          "Campo": "Favor entrar em contrato com o setor de Recursos Humanos da sua empresa."
+        }
+      ]
     }
+  ]
+}

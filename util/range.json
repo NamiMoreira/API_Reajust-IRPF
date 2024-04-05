@@ -1,5 +1,3 @@
 {
-     "rangeIP" : [
-         "localhost"
-         ]
+  "rangeIP": ["localhost"]
 }

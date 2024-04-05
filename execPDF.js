@@ -1,10 +1,10 @@
-function executaPDF(fc,req,notFound,res,homologa,notFoundBenef){
+function executaPDF(fc, req, notFound, res, homologa, notFoundBenef) {
 
   const PDFKit = require("pdfkit");
   const pdf = new PDFKit({
-      layout: "portrait",
-      size: "A4",
-    });
+    layout: "portrait",
+    size: "A4",
+  });
   var password = req.headers.authorization;
   var carteira = req.headers["x-carteira"];
   var cpfTitular = req.headers["x-cpf"];
@@ -16,48 +16,48 @@ function executaPDF(fc,req,notFound,res,homologa,notFoundBenef){
   var valorTitulo;
   var titulo = [];
   var URL = "{{hostAPI}}/IRPF?ano=%%%%";
-  var  cpfBenef;
-  var  nomeBenef ;
-  var  dnBenef ;
-  var  valorTitulo;
-  var  grauDep ;
+  var cpfBenef;
+  var nomeBenef;
+  var dnBenef;
+  var valorTitulo;
+  var grauDep;
 
-  validaIP(password,carteira,unidade,notFound,res,cpfTitular);
- 
-  fc.buscaAPI(URL,cpfTitular,password,anoBase,carteira)
-    .then((response)=>{
+  validaIP(password, carteira, unidade, notFound, res, cpfTitular);
 
-        if (response.Data[0] != undefined) {
+  fc.buscaAPI(URL, cpfTitular, password, anoBase, carteira)
+    .then((response) => {
+
+      if (response.Data[0] != undefined) {
         let titulo = fc.geraTitulo(response)
         return titulo;
-        }else{ res.end(notFoundBenef)}
-     })
+      } else { res.end(notFoundBenef) }
+    })
 
-    .catch((e)=>{
+    .catch((e) => {
       console.log(e);
     })
 
-    .then((titulo)=>{
-      let retorno =  fc.formataTextos(titulo,txtBase,anoBase);
-      txtBase = retorno.txtBase   ;
+    .then((titulo) => {
+      let retorno = fc.formataTextos(titulo, txtBase, anoBase);
+      txtBase = retorno.txtBase;
       nomeTitular = retorno.nomeTitular;
-      var pdfBase = fc.geraPDF(txtBase, nomeTitular, cpfTitular, titulo,dataEmissao,pdf);
+      var pdfBase = fc.geraPDF(txtBase, nomeTitular, cpfTitular, titulo, dataEmissao, pdf);
       return pdfBase
     })
 
-    .catch((e)=>{
+    .catch((e) => {
       console.log(e);
     })
 
-    .then((pdfBase)=>{
+    .then((pdfBase) => {
       // res.end(pdfBase)
       let JSONFinal = fc.geraJSON(pdfBase);
-        res.end(JSON.stringify(JSONFinal));
+      res.end(JSON.stringify(JSONFinal));
     })
 
-    .catch((e)=>{
+    .catch((e) => {
       console.log(e);
     });
 }
 
-  module.exports = {executaPDF};
+module.exports = { executaPDF };
