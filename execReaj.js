@@ -1,5 +1,3 @@
-
-
 function execReaj(fc, req, notFound, res, range, contractEmpre, consultReajuste) {
 
   var password = req.headers.authorization;
@@ -12,14 +10,10 @@ function execReaj(fc, req, notFound, res, range, contractEmpre, consultReajuste)
   var contadorErro = true;
   var contratEmpresarial = false;
 
-
-
   if (password == "" || carteira == "" || unidade != "XX") {
     res.end(notFound);
   } else {
     const rangeIps = JSON.parse(range);
-
-
 
     for (let a = 0; a < rangeIps.rangeIP.length; a++) {
       if (rangeIps.rangeIP[a] == ipUser) {

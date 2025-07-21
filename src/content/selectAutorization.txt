@@ -1,0 +1,59 @@
+select
+   g.cd_unidade_carteira||g.cd_carteira_usuario cd_usuario,
+   to_char(p1.dt_nascimento,'DD/MM/YYYY') dt_nascimento,
+   p1.cd_cpf cd_cpf,
+   to_char(u.dtiniciovinculounidade,'DD/MM/YYYY') dt_vinculo,
+ 
+  case
+    when  v.cd_cla_hos = 1 then 'Enfermaria'
+    when  v.cd_cla_hos = 2 then 'Apartamento'
+     else 'Ambulatorial'
+      end acomodacao,
+  case
+    when p1.char_3 != ' ' then p1.char_3
+     else p1.nm_pessoa
+       end nome ,
+  case
+    when r.cod_livre_3 = 1 then    'NACIONAL - SEGM. 02 - ENFER'
+    when r.cod_livre_3 = 2 then    'REGIONAL - GRUPO ESTADO - ENFER'
+    when r.cod_livre_3 = 3 then    'ESTADUAL - ENFER'
+    when r.cod_livre_3 = 4 then    'REGIONAL - GRP MUNIC - SEGM. 01 - ENFER'
+    when r.cod_livre_3 = 5 then    'MUNICIPAL - SEGM. 02 - ENFER'
+    when r.cod_livre_3 = 6 then    'NACIONAL - SEGM. 03 - ENFER'
+    when r.cod_livre_3 = 7 then    'NACIONAL - SEGM. 07'
+    when r.cod_livre_3 = 8 then    'REGIONAL - GRP MUNIC - SEGM. 02 - ENFER'
+    when r.cod_livre_3 = 9 then    'REGIONAL - GRP MUNIC - SEGM. 03 - ENFER'
+    when r.cod_livre_3 = 10 then   'REGIONAL - GRP MUNIC - SEGM. 07'
+    when r.cod_livre_3 = 11 then   'MUNICIPAL - SEGM. 03 - ENFER'
+    when r.cod_livre_3 = 12 then   'MUNICIPAL - SEGM. 07'
+    when r.cod_livre_3 = 13 then   'NACIONAL - SEGM. 02 - APART'
+    when r.cod_livre_3 = 14 then   'REGIONAL - GRUPO ESTADO - APART'
+    when r.cod_livre_3 = 15 then   'ESTADUAL - APART'
+    when r.cod_livre_3 = 16 then   'REGIONAL - GRP MUNIC - SEGM. 01 - APART'
+    when r.cod_livre_3 = 17 then   'MUNICIPAL - SEGM. 02 - APART'
+    when r.cod_livre_3 = 18 then   'NACIONAL - SEGM. 03 - APART'
+    when r.cod_livre_3 = 19 then   'REGIONAL - GRP MUNIC - SEGM. 02 - APART'
+    when r.cod_livre_3 = 20 then   'REGIONAL - GRP MUNIC - SEGM. 03 - APART'
+       end abrangencia
+
+    from guiautor g,usuario u,pessoa_fisica p1 ,ti_pl_sa v,propost p,reg_plano_saude r
+
+where
+       g.cd_unidade = 57
+       and g.aa_guia_atendimento = &ano
+       and g.nr_guia_atendimento = &guia
+       and g.cd_modalidade = u.cd_modalidade
+       and g.nr_ter_adesao = u.nr_proposta
+       and g.cd_usuario = u.cd_usuario
+       and u.id_pessoa = p1.id_pessoa
+       and p.cd_modalidade = v.cd_modalidade
+       and p.cd_plano = v.cd_plano
+       and p.cd_tipo_plano = v.cd_tipo_plano
+       and u.cd_modalidade = p.cd_modalidade
+       and u.nr_proposta = p.nr_proposta
+       and r.idi_registro = decode(p.in_registro_plano,
+                               '1',
+                               p.idi_plano_ans,
+                               '2',
+                               u.idi_plano_ans,
+                               v.idi_plano_ans)
